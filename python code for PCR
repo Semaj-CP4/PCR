@@ -1,0 +1,50 @@
+print("Welcome to Q5 PCR reaction calculator\n")
+print("This calculator is set to work with 40ng of DNA. Please change the template DNA section if needed.\n")
+
+def calculate_reaction(reaction_volume):
+    print(f"Great! You've selected a {reaction_volume}μl reaction.\n")
+    
+    while True:
+        try:
+            print("What is your concentration of DNA (ng/μl)?")
+            conc_DNA = float(input())
+            if conc_DNA <= 0:
+                print("Concentration must be a positive number. Please try again.")
+                continue
+            break
+        except ValueError:
+            print("Please enter a valid number for DNA concentration.")
+    
+    template_DNA = 40 / conc_DNA
+    print(f'Your amount of template DNA is {template_DNA:.2f} μl')
+    
+    # Define reagents as a dictionary for easy scaling
+    reagents = {
+        '5X Q5 Reaction Buffer': reaction_volume / 5,
+        '10mM dNTPs': reaction_volume / 50,
+        'Forward Primer': reaction_volume / 20,
+        'Reverse Primer': reaction_volume / 20,
+        'Q5 High Fidelity DNA Polymerase': reaction_volume / 100,
+        'Q5 High GC Enhancer': reaction_volume / 5
+    }
+    
+    # Print reagent amounts
+    for reagent, amount in reagents.items():
+        print(f'Your amount of {reagent} is {amount:.2f} μl')
+    
+    # Calculate Nuclease-free water
+    total_reagents = sum(reagents.values()) + template_DNA
+    nuclease_free_water = reaction_volume - total_reagents
+    print(f'Your amount of Nuclease-free water is {nuclease_free_water:.2f} μl')
+#Somewhere along these lines I need to make it a for loop so I do not have to continuously edit it and automatically change it that if I use a low concentration it will automactially do the dilution.
+while True:
+    print("Are you doing a 25μl or 50μl reaction? (please type 25 or 50)\n")
+    try:
+        reaction_type = int(input())
+        if reaction_type in [25, 50]:
+            calculate_reaction(reaction_type)
+            break
+        else:
+            print("Please enter either 25 or 50.")
+    except ValueError:
+        print("Please enter a valid number (25 or 50).")
